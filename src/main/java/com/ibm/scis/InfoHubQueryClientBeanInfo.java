@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2021 IBM Corporation.
+ * (C) Copyright 2022 IBM Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,8 @@ public class InfoHubQueryClientBeanInfo extends java.beans.SimpleBeanInfo {
     logger.entering(CLASS_NAME, METHOD_NAME);
 
     Method method =
-        beanClass.getMethod("executeQuery", String.class, String.class, String.class, String.class);
+        beanClass.getMethod(
+            "executeQuery", String.class, String.class, String.class, String.class, String.class);
 
     ParameterDescriptor param1 = new ParameterDescriptor();
     param1.setShortDescription("The url of the info hub query client.");
@@ -68,8 +69,13 @@ public class InfoHubQueryClientBeanInfo extends java.beans.SimpleBeanInfo {
     param4.setShortDescription("The client secret of the info hub query client.");
     param4.setDisplayName("client secret");
 
+    ParameterDescriptor param5 = new ParameterDescriptor();
+    param5.setShortDescription("IBM identity representing workflow functional user.");
+    param5.setDisplayName("username");
+
     MethodDescriptor methodDescriptor =
-        new MethodDescriptor(method, new ParameterDescriptor[] {param1, param2, param3, param4});
+        new MethodDescriptor(
+            method, new ParameterDescriptor[] {param1, param2, param3, param4, param5});
 
     logger.exiting(CLASS_NAME, METHOD_NAME, methodDescriptor);
     return methodDescriptor;

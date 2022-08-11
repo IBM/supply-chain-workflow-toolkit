@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2021 IBM Corporation.
+ * (C) Copyright 2022 IBM Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ public class BaseClient {
 
   protected static final String X_IBM_CLIENT_ID = "X-IBM-Client-Id";
   protected static final String X_IBM_CLIENT_SECRET = "X-IBM-Client-Secret";
-  protected static final String X_TENANT_ID = "X-Tenant-Id";
+  protected static final String IBM_USERNAME = "username";
 
   protected static final String CONTENT_TYPE = "content-type";
   protected static final String CONTENT_TYPE_JSON = "application/json";

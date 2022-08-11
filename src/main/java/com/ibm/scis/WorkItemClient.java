@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2021 IBM Corporation.
+ * (C) Copyright 2022 IBM Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,30 +39,32 @@ public class WorkItemClient extends BaseClient {
     httpClient = client;
   }
 
-  /** For BAW initializing this class. */
-  public WorkItemClient() {
-    super();
-  }
-
   /**
    * Create a work item via Sterling InfoHub workitem API
    *
    * @param url Fully specified URL points to InfoHub workitem API
    * @param clientId Sterling saascore platform client Id
    * @param clientSecret Sterling saascore platform client secret
+   * @param username IBM identity representing workflow functional user
    * @param workItem Metadata of new work item
    * @return Work item Id
    */
-  public String createWorkItem(String url, String clientId, String clientSecret, String workItem) {
+  public String createWorkItem(
+      String url, String clientId, String clientSecret, String username, String workItem) {
     HttpPost httpPost = new HttpPost(url);
     try {
       logger.log(Level.INFO, workItem);
-      buildHeaders(clientId, clientSecret, httpPost);
+      buildHeaders(clientId, clientSecret, username, httpPost);
       setPostBody(httpPost, workItem);
     } catch (UnsupportedEncodingException e) {
       return buildErrorResponse(e);
     }
     return sendRequest(httpPost);
+  }
+
+  /** For BAW initializing this class. */
+  public WorkItemClient() {
+    super();
   }
 
   /**
@@ -72,16 +74,22 @@ public class WorkItemClient extends BaseClient {
    * @param workItemId Work item Id
    * @param clientId Sterling saascore platform client Id
    * @param clientSecret Sterling saascore platform client secret
+   * @param username IBM identity representing workflow functional user
    * @param workItemPartial Partial metadata of work item for update
    * @return Work item Id
    */
   public String updateWorkItem(
-      String url, String workItemId, String clientId, String clientSecret, String workItemPartial) {
+      String url,
+      String workItemId,
+      String clientId,
+      String clientSecret,
+      String username,
+      String workItemPartial) {
     String endpoint = String.format("%s/%s", url, workItemId);
     HttpPut httpPut = new HttpPut(endpoint);
     try {
       logger.log(Level.INFO, workItemPartial);
-      buildHeaders(clientId, clientSecret, httpPut);
+      buildHeaders(clientId, clientSecret, username, httpPut);
       setPostBody(httpPut, workItemPartial);
     } catch (UnsupportedEncodingException e) {
       return buildErrorResponse(e);
@@ -90,10 +98,11 @@ public class WorkItemClient extends BaseClient {
   }
 
   private Map<String, String> buildHeaders(
-      String clientId, String clientSecret, HttpUriRequest httpRequest) {
+      String clientId, String clientSecret, String username, HttpUriRequest httpRequest) {
     ConcurrentMap<String, String> headers = new ConcurrentHashMap<>();
     headers.put(X_IBM_CLIENT_ID, clientId);
     headers.put(X_IBM_CLIENT_SECRET, clientSecret);
+    headers.put(IBM_USERNAME, username);
     headers.forEach(httpRequest::addHeader);
     return headers;
   }

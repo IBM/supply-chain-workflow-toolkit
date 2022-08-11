@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2021 IBM Corporation.
+ * (C) Copyright 2022 IBM Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,13 +49,15 @@ public class InfoHubQueryClient extends BaseClient {
    * @param dataQuery Query criteria
    * @param clientId Sterling saascore platform client Id
    * @param clientSecret Sterling saascore platform client secret
+   * @param username IBM identity representing workflow functional user
    * @return Query results in String format
    * @throws IOException
    */
   public String executeQuery(
-      String endpoint, String dataQuery, String clientId, String clientSecret) throws IOException {
+      String endpoint, String dataQuery, String clientId, String clientSecret, String username)
+      throws IOException {
     logger.log(Level.INFO, dataQuery);
-    HttpPost httpPost = buildHttpPost(endpoint, dataQuery, clientId, clientSecret);
+    HttpPost httpPost = buildHttpPost(endpoint, dataQuery, clientId, clientSecret, username);
 
     try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
       InputStream contentStream = response.getEntity().getContent();
@@ -68,11 +70,11 @@ public class InfoHubQueryClient extends BaseClient {
   }
 
   private HttpPost buildHttpPost(
-      String endpoint, String input, String clientId, String clientSecret) {
+      String endpoint, String input, String clientId, String clientSecret, String username) {
     HttpPost httpPost = new HttpPost(endpoint);
     HEADERS.put(X_IBM_CLIENT_ID, clientId);
-    HEADERS.put(X_TENANT_ID, clientId);
     HEADERS.put(X_IBM_CLIENT_SECRET, clientSecret);
+    HEADERS.put(IBM_USERNAME, username);
     HEADERS.forEach(httpPost::addHeader);
     httpPost.setEntity(new StringEntity(input, ContentType.APPLICATION_JSON));
     return httpPost;

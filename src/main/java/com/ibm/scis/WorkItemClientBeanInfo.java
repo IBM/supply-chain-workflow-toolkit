@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2021 IBM Corporation.
+ * (C) Copyright 2022 IBM Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ public class WorkItemClientBeanInfo extends java.beans.SimpleBeanInfo {
 
     Method method =
         beanClass.getMethod(
-            "createWorkItem", String.class, String.class, String.class, String.class);
+            "createWorkItem", String.class, String.class, String.class, String.class, String.class);
 
     ParameterDescriptor param1 = new ParameterDescriptor();
     param1.setShortDescription("The url of work item client service.");
@@ -68,11 +68,16 @@ public class WorkItemClientBeanInfo extends java.beans.SimpleBeanInfo {
     param3.setDisplayName("client secret");
 
     ParameterDescriptor param4 = new ParameterDescriptor();
-    param4.setShortDescription("The work item to create in work item client service.");
-    param4.setDisplayName("work item");
+    param4.setShortDescription("IBM identity representing workflow functional user.");
+    param4.setDisplayName("username");
+
+    ParameterDescriptor param5 = new ParameterDescriptor();
+    param5.setShortDescription("The work item to create in work item client service.");
+    param5.setDisplayName("work item");
 
     MethodDescriptor methodDescriptor =
-        new MethodDescriptor(method, new ParameterDescriptor[] {param1, param2, param3, param4});
+        new MethodDescriptor(
+            method, new ParameterDescriptor[] {param1, param2, param3, param4, param5});
 
     logger.exiting(CLASS_NAME, METHOD_NAME, methodDescriptor);
     return methodDescriptor;
@@ -85,7 +90,13 @@ public class WorkItemClientBeanInfo extends java.beans.SimpleBeanInfo {
 
     Method method =
         beanClass.getMethod(
-            "updateWorkItem", String.class, String.class, String.class, String.class, String.class);
+            "updateWorkItem",
+            String.class,
+            String.class,
+            String.class,
+            String.class,
+            String.class,
+            String.class);
 
     ParameterDescriptor param1 = new ParameterDescriptor();
     param1.setShortDescription("The url of work item client service.");
@@ -104,12 +115,16 @@ public class WorkItemClientBeanInfo extends java.beans.SimpleBeanInfo {
     param4.setDisplayName("client secret");
 
     ParameterDescriptor param5 = new ParameterDescriptor();
-    param5.setShortDescription("The work item content to update in work item client service.");
-    param5.setDisplayName("work item updates");
+    param5.setShortDescription("IBM identity representing workflow functional user.");
+    param5.setDisplayName("username");
+
+    ParameterDescriptor param6 = new ParameterDescriptor();
+    param6.setShortDescription("The work item content to update in work item client service.");
+    param6.setDisplayName("work item updates");
 
     MethodDescriptor methodDescriptor =
         new MethodDescriptor(
-            method, new ParameterDescriptor[] {param1, param2, param3, param4, param5});
+            method, new ParameterDescriptor[] {param1, param2, param3, param4, param5, param6});
 
     logger.exiting(CLASS_NAME, METHOD_NAME, methodDescriptor);
     return methodDescriptor;

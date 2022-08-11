@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2021 IBM Corporation.
+ * (C) Copyright 2022 IBM Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,8 @@ public class WorkItemClientTest {
     String testWorkItemObj = "{\"foo\", \"bar\"}";
     String result =
         new WorkItemClient(mockHttpClient)
-            .createWorkItem("clientId", "testClientSecret", testWorkItemObj, "testEndpoint");
+            .createWorkItem(
+                "testUrl", "testClientId", "testClientSecret", "testUsername", testWorkItemObj);
     assertEquals("{\"id\":\"new_work_id\"}", result);
   }
 
@@ -62,7 +63,12 @@ public class WorkItemClientTest {
     String result =
         new WorkItemClient(mockHttpClient)
             .updateWorkItem(
-                "testEndpoint", "workItemId", "testClientId", "testClientSecret", testWorkItemObj);
+                "testUrl",
+                "testWorkItemId",
+                "testClientId",
+                "testClientSecret",
+                "testUsername",
+                testWorkItemObj);
     assertEquals("{\"id\":\"foo\"}", result);
   }
 
@@ -76,7 +82,8 @@ public class WorkItemClientTest {
     String testWorkItemObj = "{\"type\", \"WorkItem\"}";
     String result =
         new WorkItemClient(mockHttpClient)
-            .createWorkItem("clientId", "testClientSecret", testWorkItemObj, "testEndpoint");
+            .createWorkItem(
+                "testUrl", "testClientId", "testClientSecret", "testUsername", testWorkItemObj);
     assertEquals("{\"error\":\"Field type must be empty\"}", result);
   }
 
@@ -89,7 +96,8 @@ public class WorkItemClientTest {
     String testWorkItemObj = "{\"foo\", \"bar\"}";
     String result =
         new WorkItemClient(mockHttpClient)
-            .createWorkItem("clientId", "testClientSecret", testWorkItemObj, "testEndpoint");
+            .createWorkItem(
+                "testUrl", "testClientId", "testClientSecret", "testUsername", testWorkItemObj);
     assertEquals("{\"error\":\"Error occurred\"}", result);
   }
 }

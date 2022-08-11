@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ (C) Copyright 2021 IBM Corporation.
+  ~ (C) Copyright 2022 IBM Corporation.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
 
     <groupId>com.ibm.scis</groupId>
     <artifactId>scis-toolkit</artifactId>
-    <version>1.14.0</version>
+    <version>1.8.0</version>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -31,8 +31,14 @@
         <junit.junit.version>4.13.2</junit.junit.version>
         <org.mockito.all.version>1.10.19</org.mockito.all.version>
         <com.sun.mail.version>1.5.6</com.sun.mail.version>
+        <org.apache.commons.codec.version>1.13</org.apache.commons.codec.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>${org.apache.commons.codec.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>

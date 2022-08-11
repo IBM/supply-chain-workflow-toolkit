@@ -1,12 +1,12 @@
 # SCIS toolkit
 
-This projects contains the Supply Chain Intelligence Suite (SCIS) toolkit. This toolkit contains a library of workflow components that are designed to be shared across multiple workflows within an organization. The toolkit components help to facilitate common and expected workflow routines such as updating the work item associated with a given process instance. In particular, the toolkit exposes service flows for interfacing with Sterling InfoHub and [Sendgrid email delivery](https://cloud.ibm.com/catalog/infrastructure/email-delivery). Simply import this toolkit within your workflow projects to begin utilizing these shared capabilities. For more information on toolkits within IBM Business Automation Workflow, you may consult [the BAW documentation for creating toolkits](https://www.ibm.com/docs/en/baw/20.x?topic=mp-creating-changing-deleting-toolkit-dependency-in-designer-view).
+This projects contains the Supply Chain Intelligence Suite (SCIS) toolkit. This toolkit contains a library of workflow components that are designed to be shared across multiple workflows within an organization. The toolkit components help to facilitate common and expected workflow routines such as updating the work item and actions taken associated with a given process instance. In particular, the toolkit exposes service flows for interfacing with Sterling InfoHub and [Sendgrid email delivery](https://cloud.ibm.com/catalog/infrastructure/email-delivery). Simply import this toolkit within your workflow projects to begin utilizing these shared capabilities. For more information on toolkits within IBM Business Automation Workflow, you may consult [the BAW documentation for creating toolkits](https://www.ibm.com/docs/en/baw/20.x?topic=mp-creating-changing-deleting-toolkit-dependency-in-designer-view).
 
 
 ## Importing the toolkit
 You can import SCIS toolkit into **IBM® Business Automation Workflow** libraries through the Workflow Center console.
 
-Please download the latest SCIS toolkit(.twx) from this project's release page and follow the [instructions on how to import a toolkit into BAW](https://www.ibm.com/docs/en/baw/20.x?topic=projects-importing-exporting) to import the SCIS toolkit. Please note once the toolkit is imported, you should be able to view the service flows described within the README inside of your respective workflow.
+Please download the latest SCIS toolkit(.twx) from [Github release page](https://github.ibm.com/SC-Shared-Services/ai-workflow-toolkit/releases) and follow the [instructions on how to import a toolkit into BAW](https://www.ibm.com/docs/en/baw/20.x?topic=projects-importing-exporting) to import the SCIS toolkit. Please note once the toolkit is imported, you should be able to view the service flows described within the README inside of your respective workflow.
 
 !['import' button image](src/images/serviceflow.png)
 
@@ -26,8 +26,11 @@ Users need to follow the [instruction](https://www.ibm.com/docs/en/baw/19.x?topi
 | EMAIL_PASSWORD | The password for email service |
 | GQL_URL | Fully specified URL points to InfoHub query API
 | WORKITEM_URL | Fully specified URL points to InfoHub workitem API  |
-| INFOHUB\_CLIENT\_ID_\<*tenantId*> | Sterling saascore platform client Id. Please attach tenantId to the end of string **`INFOHUB_CLIENT_ID_`** as the environment name. <br/>e.g. INFOHUB\_CLIENT\_ID\_22909_fdf\_768876<br/>** *tenantId* is InfoHub tenant ID associated with the given organization. |
-| INFOHUB\_CLIENT\_SECRET_\<*tenantId*> | Sterling saascore platform client secret. Please attach tenantId to the end of string **`INFOHUB_CLIENT_SECRET_`** as the environment name. <br/>e.g. INFOHUB\_CLIENT\_ID\_22909_fdf\_768876 <br/>** *tenantId* is InfoHub tenant ID associated with the given organization. |
+| ACTIONTAKEN_URL | Fully specified URL points to InfoHub actionTaken API  |
+| PROCESS\_PORTAL\_TASK_URL | Partially specified URL points to given task in Process Portal |
+| INFOHUB\_CLIENT\_ID_\<*clientId*> | Sterling saascore platform client Id. Please attach clientId to the end of string **`INFOHUB_CLIENT_ID_`** as the environment name. <br/>e.g. INFOHUB\_CLIENT\_ID\_22909_fdf\_768876<br/>** *clientId* is InfoHub client ID associated with the given organization. |
+| INFOHUB\_CLIENT\_SECRET_\<*clientId*> | Sterling saascore platform client secret. Please attach clientId to the end of string **`INFOHUB_CLIENT_SECRET_`** as the environment name. <br/>e.g. INFOHUB\_CLIENT\_ID\_22909_fdf\_768876 <br/>** *clientId* is InfoHub client ID associated with the given organization. |
+| STERLING_FUNCTIONAL_USER | IBM identity representing workflow functional user
 
 ## Java modules in SCIS toolkit
 
@@ -56,8 +59,9 @@ There're a series of external services in SCIS toolkit. Please refer below to br
 |:---|:---|:---|
 | endpoint | String  | Fully specified URL points to InfoHub query API  |
 | dataQuery | String  | Query criteria  |
-| tenantId | String  | InfoHub tenant ID associated with the given organization  |
+| clientId | String  | InfoHub client ID associated with the given organization  |
 | clientSecret | String  |  Sterling saascore platform client secret  |
+| username | String  |  IBM identity representing workflow functional user  |
 
 
 #### ● Output
@@ -107,6 +111,7 @@ No output
 | url | String  |  Query criteria |
 | clientId | String  | Sterling saascore platform client Id  |
 | clientSecret | String  |  Sterling saascore platform client secret |
+| username | String  |  IBM identity representing workflow functional user  |
 | workItem | String  |  Metadata of new work item |
 
 
@@ -126,6 +131,7 @@ No output
 | workItemId | String  |  Work item Id |
 | clientId | String  | Sterling saascore platform client Id  |
 | clientSecret | String  |  Sterling saascore platform client secret |
+| username | String  |  IBM identity representing workflow functional user  |
 | workItemPartial | String  |  Partial metadata of work item for update |
 
 

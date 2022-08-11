@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2021 IBM Corporation.
+ * (C) Copyright 2022 IBM Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,12 @@ public class InfoHubQueryClientTest extends BaseClient {
     when(mockHttpClient.execute(Mockito.any())).thenReturn(mockHttpResponse);
     String result =
         new InfoHubQueryClient(mockHttpClient)
-            .executeQuery("testDataQuery", "testClientId", "testClientSecret", "testEndpoint");
+            .executeQuery(
+                "testEndpoint",
+                "testDataQuery",
+                "testClientId",
+                "testClientSecret",
+                "testUsername");
     assertEquals("{\"foo\":\"bar\"}", result);
   }
 
@@ -61,7 +66,12 @@ public class InfoHubQueryClientTest extends BaseClient {
     when(mockHttpClient.execute(Mockito.any())).thenReturn(mockHttpResponse);
     String result =
         new InfoHubQueryClient(mockHttpClient)
-            .executeQuery("testEndpoint", "testInput", "testClientId", "testClientSecret");
+            .executeQuery(
+                "testEndpoint",
+                "testDataQuery",
+                "testClientId",
+                "testClientSecret",
+                "testUsername");
     assertEquals("{\"error\":\"errorMessage\"}", result);
   }
 
@@ -77,7 +87,12 @@ public class InfoHubQueryClientTest extends BaseClient {
             NullPointerException.class,
             () ->
                 new InfoHubQueryClient(mockHttpClient)
-                    .executeQuery("testEndpoint", "testInput", "testClientId", "testClientSecret"));
+                    .executeQuery(
+                        "testEndpoint",
+                        "testDataQuery",
+                        "testClientId",
+                        "testClientSecret",
+                        "testUsername"));
     assertEquals("Error occurred", exception.getMessage());
   }
 }
