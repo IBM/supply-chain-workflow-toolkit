@@ -16,12 +16,23 @@
 
 package com.ibm.scis;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.net.ssl.SSLContext;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.ssl.SSLContexts;
@@ -35,6 +46,10 @@ public class BaseClient {
   protected static final String X_IBM_CLIENT_ID = "X-IBM-Client-Id";
   protected static final String X_IBM_CLIENT_SECRET = "X-IBM-Client-Secret";
   protected static final String IBM_USERNAME = "username";
+
+  protected static final String AUTHORIZATION = "Authorization";
+  protected static final String IBM_CSRF_TOKEN = "IBM-CSRF-TOKEN";
+  protected static final String BPM_CSRF_TOKEN = "bpmcsrftoken";
 
   protected static final String CONTENT_TYPE = "content-type";
   protected static final String CONTENT_TYPE_JSON = "application/json";
@@ -60,5 +75,60 @@ public class BaseClient {
     }
     httpClient =
         HttpClientBuilder.create().setDefaultRequestConfig(config).setSSLContext(ctx).build();
+  }
+
+  protected Map<String, String> buildBasicAuthHeader(
+      String userName, String password, HttpUriRequest httpRequest) {
+    Map<String, String> headers = new ConcurrentHashMap<>();
+    final Base64.Encoder encoder = Base64.getEncoder();
+    String basicToken =
+        "Basic "
+            + encoder.encodeToString((userName + ':' + password).getBytes(StandardCharsets.UTF_8));
+    headers.put(BaseClient.AUTHORIZATION, basicToken);
+    headers.forEach(httpRequest::addHeader);
+    return headers;
+  }
+
+  protected Map<String, String> buildBasicAuthHeaderWithIBMCsrfToken(
+      String userName, String password, String csrfToken, HttpUriRequest httpRequest) {
+    Map<String, String> headers = buildBasicAuthHeader(userName, password, httpRequest);
+    httpRequest.addHeader(IBM_CSRF_TOKEN, csrfToken);
+    return headers;
+  }
+
+  protected Map<String, String> buildBasicAuthHeaderWithBPMCsrfToken(
+      String userName, String password, String csrfToken, HttpUriRequest httpRequest) {
+    Map<String, String> headers = buildBasicAuthHeader(userName, password, httpRequest);
+    httpRequest.addHeader(BPM_CSRF_TOKEN, csrfToken);
+    return headers;
+  }
+
+  protected String processHttpRequest(HttpRequestBase request) {
+    try (CloseableHttpResponse response = httpClient.execute(request)) {
+      InputStream contentStream = response.getEntity().getContent();
+      String result = Utils.inputStreamToString(contentStream);
+      logger.info(result);
+      return result;
+    } catch (Exception e) {
+      logger.log(Level.SEVERE, e.getMessage());
+      return "{\"error\":\"" + e.getMessage() + "\"}";
+    }
+  }
+
+  /**
+   * @param csrfTokenUrl CSRF TOKEN URL
+   * @param userName BAW functional user name
+   * @param password BAW functional password
+   * @param lifeTime requested life time (seconds), e.g. 7200
+   * @return csrf token
+   */
+  protected String getCSRFToken(
+      String csrfTokenUrl, String userName, String password, Integer lifeTime) {
+    HttpPost httpPost = new HttpPost(csrfTokenUrl);
+    buildBasicAuthHeader(userName, password, httpPost);
+    httpPost.setEntity(
+        new StringEntity(
+            "{\"requested_lifetime\": " + lifeTime + "}", ContentType.APPLICATION_JSON));
+    return processHttpRequest(httpPost);
   }
 }

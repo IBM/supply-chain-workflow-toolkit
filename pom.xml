@@ -22,7 +22,7 @@
 
     <groupId>com.ibm.scis</groupId>
     <artifactId>scis-toolkit</artifactId>
-    <version>1.8.0</version>
+    <version>1.9.0</version>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
